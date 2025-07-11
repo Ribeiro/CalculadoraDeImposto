@@ -1,33 +1,43 @@
 package br.gov.ce.sefaz.courses.tddcourse.model;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ProdutoTest {
+class ProdutoTest {
 
     @Test
-    public void DeveCriarProdutoComValorPositivo() {
+    void DeveCriarProdutoComValorPositivo() {
         BigDecimal valor = new BigDecimal("150.00");
         Produto produto = new Produto(valor);
         assertThat(produto.getValor(), equalTo(valor));
     }
 
     @Test
-    public void DeveCriarProdutoComValorZero() {
-        BigDecimal valor = BigDecimal.ZERO;
-        Produto produto = new Produto(valor);
-        assertThat(produto.getValor(), equalTo(valor));
+    void DeveCriarProdutoComValorZero() {
+        BigDecimal valorZero = BigDecimal.ZERO;
+         IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new Produto(valorZero));
+        assertThat(ex.getMessage(), is("O valor do produto não pode ser zero ou negativo"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void DeveLancarExcecaoQuandoValorForNegativo() {
-        new Produto(new BigDecimal("-10.00"));
+    @Test
+    void DeveLancarExcecaoQuandoValorForNegativo() {
+        BigDecimal valorNegativo = new BigDecimal("-10.00");
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new Produto(valorNegativo));
+        assertThat(ex.getMessage(), is("O valor do produto não pode ser zero ou negativo"));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void DeveLancarExcecaoQuandoValorForNulo() {
-        new Produto(null);
+    @Test
+    void DeveLancarExcecaoQuandoValorForNulo() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new Produto(null));
+        assertThat(ex.getMessage(), is("O valor do produto não pode ser nulo"));
     }
 }
