@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class Produto {
 
-	public BigDecimal valor;
+	private final BigDecimal valor;
 
 	public Produto(BigDecimal valor) {
 		Objects.requireNonNull(valor, "O valor do produto não pode ser nulo");
