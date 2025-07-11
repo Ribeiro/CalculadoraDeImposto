@@ -1,43 +1,46 @@
 package br.gov.ce.sefaz.courses.tddcourse.model;
 
+import br.gov.ce.sefaz.courses.tddcourse.fixture.ProdutoFixture;
 import org.junit.jupiter.api.Test;
-import java.math.BigDecimal;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.math.BigDecimal;
 
 class ProdutoTest {
 
     @Test
     void DeveCriarProdutoComValorPositivo() {
-        BigDecimal valor = new BigDecimal("150.00");
-        Produto produto = new Produto(valor);
-        assertThat(produto.getValor(), equalTo(valor));
+        Produto produto = ProdutoFixture.valido();
+        assertThat(produto.getValor(), equalTo(ProdutoFixture.valorPositivo()));
     }
 
     @Test
-    void DeveCriarProdutoComValorZero() {
-        BigDecimal valorZero = BigDecimal.ZERO;
-         IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> new Produto(valorZero));
+    void DeveLancarExcecaoQuandoValorForZero() {
+        BigDecimal valorZero = ProdutoFixture.valorZero();
+        IllegalArgumentException ex = assertThrows(
+            IllegalArgumentException.class,
+            () -> ProdutoFixture.comValor(valorZero)
+        );
         assertThat(ex.getMessage(), is("O valor do produto não pode ser zero ou negativo"));
     }
 
     @Test
     void DeveLancarExcecaoQuandoValorForNegativo() {
-        BigDecimal valorNegativo = new BigDecimal("-10.00");
+        BigDecimal valorNegativo = ProdutoFixture.valorNegativo();
         IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> new Produto(valorNegativo));
+            IllegalArgumentException.class,
+            () -> ProdutoFixture.comValor(valorNegativo)
+        );
         assertThat(ex.getMessage(), is("O valor do produto não pode ser zero ou negativo"));
     }
 
     @Test
     void DeveLancarExcecaoQuandoValorForNulo() {
         IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> new Produto(null));
+            IllegalArgumentException.class,
+            () -> ProdutoFixture.comValor(null)
+        );
         assertThat(ex.getMessage(), is("O valor do produto não pode ser nulo"));
     }
 }
